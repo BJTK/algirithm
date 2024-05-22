@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // let obj = {
+      //     a:1,
+      //     b:2
+      // }
+      // with(obj){
+      //     console.log(a,b)
+
+      // }
+      // var str = 'abbaca';
+      // var stack = [];
+      // for(v of str){
+      //    let prev = stack.pop();
+      //    if(prev != v){
+      //     stack.push(prev);
+      //     stack.push(v)
+      //    }
+      // }
+      // console.log(stack.join(''))
+      // let a = {key:'a'};
+      // let b = {key:'b'};
+      // let c = {key:'c'};
+      // let d = {key:'d'};
+      // let e = {key:'e'};
+      // a.next =b
+      // b.next = c
+      // c.next = e
+      // e.next = null
+      // console.log(a)
+      const tree = {
+        val: "1",
+        left: {
+          val: "2",
+          left: { val: "4", left: null, right: null },
+          right: { val: "5", left: null, right: null },
+        },
+        right: {
+          val: "3",
+          left: { val: "6", left: null, right: null },
+          right: { val: "7", left: null, right: null },
+        },
+      };
+      // 二叉树前序 根 左  右
+      //方法一：
+      var binaryTreeFrontOrder = function (root) {
+        let arr = [];
+        var fun = (node) => {
+          if (node) {
+            arr.push(node.val);
+            fun(node.left);
+            fun(node.right);
+          }
+        };
+        fun(root);
+        return arr;
+      };
+      //方法二
+      // var preorderTraversal = function(root){
+      //   debugger
+      //   if(!root) return;
+      //   let arr = [];
+      //   //根节点入栈
+      //   let stack = [root];
+      //   while(stack.length){
+      //     //出栈
+      //     let o = stack.pop();
+      //     arr.push(o.val);
+      //     //入栈
+      //     o.right && stack.push(o.right);
+      //     o.left && stack.push(o.left);
+      //   }
+      //   return arr
+      // }
+
+      // 二叉树 中序   左 根 右
+
+      var binaryTreeMidOrder = function(root){
+        const arr = [];
+        const fun = (root) =>{
+          if(!root) return;
+          fun(root.left);
+          arr.push(root.val);
+          fun(root.right)
+        }
+        fun(root);
+        return arr
+      }
+
+      // var inorderTraversal = function(root){
+      //   const arr = [];
+      //   const stack = [];
+      //   let o = root;
+      //   while(stack.length || o){
+      //     while(o){
+      //       stack.push(o);
+      //       o = o.left;
+      //     }
+      //     const n = stack.pop();
+      //     arr.push(n.val)
+      //     o = n.right;
+      //   }
+      //   return arr
+      // }
+      //二叉树 后序   左 右 根
+      var binaryTreeBackOrder = function (root) {
+        const arr = [];
+        const fun = (node) => {
+          if (node) {
+            fun(node.left);
+            fun(node.right);
+            arr.push(node.val);
+          }
+        };
+        fun(root);
+        return arr;
+      };
+
+      /**
+       * name 二叉树最小深度
+      */
+      var minDepth = (root) => {
+        if (!root) return 0;
+        const stack = [[root, 1]];
+        while (stack.length) {
+          const [o, n] = stack.shift();
+          if (!o.left && !o.right) {
+            return n;
+          }
+          if (o.left) stack.push([o.left, n + 1]);
+          if (o.right) stack.push([o.right, n + 1]);
+        }
+      };
+      /**
+       * name 二叉树最大深度
+      */
+      var maxDepth = function(root){
+        if(!root) return 0 ;
+        const stack  = [root];
+        let num = 0 ;
+        while(stack.length){
+          let len = stack.length;
+          num++;
+          while(len --){
+            const o = stack.shift();
+            o.left && stack.push(o.left);
+            o.right && stack.push(o.right);
+          }
+        }
+        return num
+      }
+      /**
+       * name 二叉树翻转
+       * */ 
+      var invertTree = function (root) {
+        if (root === null) return null;
+        let temp = root.left;
+        root.left = root.right;
+        root.right = temp;
+        invertTree(root.left);
+        invertTree(root.right);
+      };
+
+      // console.log(maxDepth(tree))
+      // 插入排序
+      function insertSort(arr) {
+        let len = arr.length;
+        for (let i = 1; i < len; i++) {
+          let temp = arr[i];
+          let j = i - 1;
+          while (j >= 0 && arr[j] > temp) {
+            arr[j + 1] = arr[j];
+            j--;
+          }
+          arr[j + 1] = temp;
+        }
+        return arr;
+      }
+      /**
+       * @name 归并排序
+       * @method
+       * @param
+       */
+      function mergeSort(arr) {
+        if (arr.length < 2) return arr;
+        let mid = Math.floor(arr.length / 2);
+        let merge = function (leftArr, rightArr) {
+          let resultArr = [];
+          while (leftArr.length && rightArr.length) {
+            resultArr.push(
+              leftArr[0] <= rightArr[0] ? leftArr.shift() : rightArr.shift()
+            );
+          }
+          return resultArr.concat(leftArr).concat(rightArr);
+        };
+        return merge(mergeSort(arr.slice(0, mid)), mergeSort(arr.slice(mid)));
+      }
+      var arr = [8, 4, 2, 56, 6, 1, 5, 24];
+      // console.log(mergeSort(arr))
+        /**
+       * @name 快速排序
+       * @method
+       * @param
+       */
+      function quickSort(arr) {
+        if (arr.length <= 1) return arr;
+        let mid = Math.floor(arr.length / 2);
+        let midVal = arr.splice(mid, 1)[0];
+        let left = [];
+        let right = [];
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i] < midVal) {
+            left.push(arr[i]);
+          } else {
+            right.push(arr[i]);
+          }
+        }
+
+        return quickSort(left).concat([midVal], quickSort(right));
+      }
+      // console.log(quickSort(arr));
+      /**
+       * 有序序列
+       * name 二分搜索法
+      */
+     function search(arr,target){
+      let count = 1;
+      let start = 0;
+      let end = arr.length -1;
+      while(start <= end){
+         let middle = Math.floor((start+end)/2);
+         let guess = arr[middle];
+         if(guess == target) return middle;
+         if(guess > target){
+            end = middle
+         }
+         if(guess < target){
+          start = middle + 1
+         }
+         count++
+
+      }
+     }
+    </script>
+  </body>
+</html>
